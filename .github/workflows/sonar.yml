@@ -35,3 +35,9 @@ jobs:
           enterprise-server-url: 'https://e7b82a65.portswigger.cloud'
           enterprise-api-key: 'wNDtztSFdOUMh7WimyElaeSznIYJtpuo'
           start-url: 'https://brokencrystals.com/'
+          report-file-path: 'burp_report.xml'
+      - name: Upload burp file
+        uses: actions/upload-artifact@v4
+        with:
+          name: burp_report.xml
+          path: burp_report.xml
