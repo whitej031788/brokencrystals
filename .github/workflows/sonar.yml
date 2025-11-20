@@ -35,9 +35,26 @@ jobs:
           enterprise-server-url: 'https://e7b82a65.portswigger.cloud'
           enterprise-api-key: 'wNDtztSFdOUMh7WimyElaeSznIYJtpuo'
           start-url: 'https://brokencrystals.com/'
-          report-file-path: 'burp_report.xml'
-      - name: Upload burp file
+          report-file-path: ${{ github.workspace }}/burp_junit_report.xml
+      - name: Upload JUnit report as artifact
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: burp_report.xml
-          path: burp_report.xml
+          name: Upload Burp report
+          path: ${{ github.workspace }}/burp_junit_report.xml
+      - name: Upload Burp XML
+        if: always()
+        id: upload-burp-results
+        uses: actions/upload-artifact@v4
+        with:
+          name: burp-results
+          path: .burp/burp_xml_report.xml
+      - name: Publish web app scan results to pipeline
+        if: always()
+        id: publish-burp-junit-test-report
+        uses: mikepenz/action-junit-report@v3
+        with:
+          check_name: View Burp scan results
+          report_paths: ${{ github.workspace }}/burp_junit_report.xml
+          fail_on_failure: false
+          require_tests: false
